@@ -23,7 +23,7 @@ This has many uses:
  </ItemGroup>
  ```
 
- Then `dotnet restore`, followed by `dotnet dockerize` to make your 
+ Then `dotnet restore`, followed by `dotnet dockerize` to make your docker image. The default tag is the project name.
 
 ## Options
 
