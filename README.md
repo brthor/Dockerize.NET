@@ -1,5 +1,4 @@
-# Dockerize.NET
-Package your .NET Core Application into a docker container.
+# Dockerize.NET: Quickly package your .NET Core Application into a docker container.
 
 `dotnet dockerize -t brthor/serviceWorker:dev`
 
