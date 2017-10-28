@@ -81,7 +81,7 @@ Tag: newApp
 
 ... etc output...
 
-$ docker run -it test
+$ docker run -it newApp
 Hello World!
 ```
 
