@@ -1,4 +1,4 @@
-# Dockerize.NET: Make a docker image from your .NET Core app.
+# Dockerize.NET: Your .NET Core App to a docker image
 
 `dotnet dockerize -t brthor/serviceWorker:dev`
 
