@@ -12,9 +12,9 @@ ADD ./publish/ /projectBinaries/
 CMD /projectBinaries/{1}
 ";
 
-        public static string Generate(DockerizeConfiguration config)
+        public static string Generate(DockerizeConfiguration config, string outputBinaryName)
         {
-            return string.Format(Template, config.BaseImage, config.GeneratedImageTagSuffix);
+            return string.Format(Template, config.BaseImage, outputBinaryName);
         }
     }
 }

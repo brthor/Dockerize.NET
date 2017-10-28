@@ -2,28 +2,27 @@
 {
     public class DockerizeConfiguration
     {
+        private string _generatedImageTag;
+
         /// <summary>
         /// The base docker image used for the generated docker file. If you change this from the default, be sure to
         /// update BaseRid if appropriate. Defaults to "microsoft/dotnet:2.0-runtime".
         /// </summary>
-        public string BaseImage { get; set; } = "microsoft/dotnet:2.0-runtime";
+        public string BaseImage { get; }
 
         /// <summary>
         /// The RID of the specified Base Docker image. Defaults to "linux-x64".
         /// </summary>
-        public string BaseRid { get; set; } = "linux-x64";
+        public string BaseRid { get; }
 
-        /// <summary>
-        /// defaults to empty.
-        /// </summary>
-        public string GeneratedImageTagPrefix { get; set; } = string.Empty;
-        
-        /// <summary>
-        /// Defaults to project name.
-        /// </summary>
-        public string GeneratedImageTagSuffix { get; set; }
+        public string GeneratedImageTag { get; }
 
-        
-        public string GeneratedImageTag => $"{GeneratedImageTagPrefix}{GeneratedImageTagSuffix}";
+        public DockerizeConfiguration(string projectName, string tag = null, string baseRid = "linux-x64",
+            string baseImage = "microsoft/dotnet:2.0-runtime")
+        {
+            GeneratedImageTag = tag ?? projectName;
+            BaseRid = baseRid;
+            BaseImage = baseImage;
+        }
     }
 }
