@@ -42,19 +42,16 @@ namespace Brthor.Dockerize
             });
             
             return commandLineApplication.Execute(args);
-
         }
         
         static int Run(DockerizeConfiguration config){
 
             var projectDirectory = Environment.CurrentDirectory;
-            var muxer = new Muxer();
-            var deferencedMuxerPath = DereferenceSymLinks(muxer.MuxerPath);
             var dockerizeBaseDir = Path.Combine(projectDirectory, "bin", "dockerize");
             var publishOutDirectory = Path.Combine(dockerizeBaseDir, "publish");
             var dockerfilePath = Path.Combine(dockerizeBaseDir, "Dockerfile");
             
-            var publish = Command.Create(deferencedMuxerPath, new[] {"publish", "-o", publishOutDirectory, "-r", config.BaseRid});
+            var publish = Command.Create("dotnet", new[] {"publish", "-o", publishOutDirectory, "-r", config.BaseRid});
 
             var publishResult = publish.WorkingDirectory(projectDirectory).ForwardStdErr().ForwardStdOut().Execute();
 
@@ -63,8 +60,23 @@ namespace Brthor.Dockerize
                 return publishResult.ExitCode;
             }
 
+            var publishOutputDepsJsons = Directory.EnumerateFiles(publishOutDirectory, "*.deps.json").ToList();
+            if (publishOutputDepsJsons.Count > 1)
+            {
+                throw new GracefulException(string.Format(
+                    "Multiple output programs were found in {0}. Please try removing bin obj directories and retrying.",
+                    publishOutDirectory));
+            }
+            
+            if (!publishOutputDepsJsons.Any())
+            {
+                throw new GracefulException(string.Format(
+                    "No output programs were found in {0}. Please examine 'dotnet publish' results and try again.",
+                    publishOutDirectory));
+            }
+
             var outputBinaryName =
-                Path.GetFileNameWithoutExtension(Directory.EnumerateFiles(publishOutDirectory, "*.deps.json").Single()).Replace(".deps", "");
+                Path.GetFileNameWithoutExtension(publishOutputDepsJsons.Single()).Replace(".deps", "");
 
             var dockerfile = DockerfileTemplate.Generate(config, outputBinaryName);
             
@@ -99,6 +111,7 @@ namespace Brthor.Dockerize
         }
         
         // https://github.com/dotnet/cli/blob/444d75c0cd482f44af392d4fce8bfc081b25d2b4/src/Microsoft.DotNet.Cli.Utils/CommandResolution/ProjectFactory.cs#L71
+        // ReSharper disable once InconsistentNaming
         private static string GetMSBuildProjPath(string projectDirectory)
         {
             IEnumerable<string> projectFiles = Directory
