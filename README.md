@@ -1,5 +1,8 @@
 # Dockerize.NET: Your .NET Core App to a docker image
 
+[![Build Status](https://travis-ci.org/brthor/Dockerize.NET.svg?branch=master)](https://travis-ci.org/brthor/Dockerize.NET)
+[![Myget Version Number](https://img.shields.io/myget/thor/v/Brthor.Dockerize.NET.svg?color=green)](https://www.myget.org/feed/thor/package/nuget/Brthor.Dockerize.NET)
+
 `dotnet dockerize -t brthor/serviceWorker:dev`
 
 This is a simple dotnet cli tool that enables you to easily package your dotnet app into a docker container. The above invocation creates a docker image with the tag `brthor/serviceWorker:dev` which you can then `docker push` to your registry or `docker run` locally.
