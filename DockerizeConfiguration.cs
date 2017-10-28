@@ -1,4 +1,4 @@
-﻿namespace Dotnet.Dockerize
+﻿namespace Brthor.Dockerize
 {
     public class DockerizeConfiguration
     {

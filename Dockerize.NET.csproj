@@ -3,6 +3,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <Version>1.0.0-beta-$(VersionSuffix)</Version>
+    <AssemblyName>dotnet-dockerize</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.DotNet.Cli.Utils" Version="2.0.0" />

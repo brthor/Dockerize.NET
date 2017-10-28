@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Microsoft.DotNet.Cli.Utils;
 
-namespace Dotnet.Dockerize
+namespace Brthor.Dockerize
 {
     class Program
     {
