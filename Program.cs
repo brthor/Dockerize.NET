@@ -7,7 +7,6 @@ namespace Dotnet.Dockerize
 {
     class Program
     {
-        
         static int Main(string[] args)
         {
             var projectDirectory = Environment.CurrentDirectory;
@@ -45,23 +44,23 @@ namespace Dotnet.Dockerize
             return dockerResult.ExitCode;
         }
 
-        private static string DereferenceSymLinks(string muxerPath)
+        private static string DereferenceSymLinks(string path)
         {
-            var oldMuxerPath = muxerPath;
-            var newMuxerPath = DereferenceSymLinkSingle(oldMuxerPath);
+            var oldPath = path;
+            var newPath = DereferenceSymLinkSingle(oldPath);
 
-            while (oldMuxerPath != newMuxerPath && !string.IsNullOrWhiteSpace(newMuxerPath))
+            while (oldPath != newPath && !string.IsNullOrWhiteSpace(newPath))
             {
-                oldMuxerPath = newMuxerPath;
-                newMuxerPath = DereferenceSymLinkSingle(oldMuxerPath);
+                oldPath = newPath;
+                newPath = DereferenceSymLinkSingle(oldPath);
             }
 
-            return oldMuxerPath;
+            return oldPath;
         }
 
-        private static string DereferenceSymLinkSingle(string oldMuxerPath)
+        private static string DereferenceSymLinkSingle(string oldPath)
         {
-            return Command.Create("readlink", new[] {oldMuxerPath}).CaptureStdOut().CaptureStdErr().Execute().StdOut
+            return Command.Create("readlink", new[] {oldPath}).CaptureStdOut().CaptureStdErr().Execute().StdOut
                 .Trim();
         }
     }
