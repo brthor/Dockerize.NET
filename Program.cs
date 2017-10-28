@@ -89,26 +89,6 @@ namespace Brthor.Dockerize
 
             return dockerResult.ExitCode;
         }
-
-        private static string DereferenceSymLinks(string path)
-        {
-            var oldPath = path;
-            var newPath = DereferenceSymLinkSingle(oldPath);
-
-            while (oldPath != newPath && !string.IsNullOrWhiteSpace(newPath))
-            {
-                oldPath = newPath;
-                newPath = DereferenceSymLinkSingle(oldPath);
-            }
-
-            return oldPath;
-        }
-
-        private static string DereferenceSymLinkSingle(string oldPath)
-        {
-            return Command.Create("readlink", new[] {oldPath}).CaptureStdOut().CaptureStdErr().Execute().StdOut
-                .Trim();
-        }
         
         // https://github.com/dotnet/cli/blob/444d75c0cd482f44af392d4fce8bfc081b25d2b4/src/Microsoft.DotNet.Cli.Utils/CommandResolution/ProjectFactory.cs#L71
         // ReSharper disable once InconsistentNaming
