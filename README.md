@@ -84,3 +84,8 @@ Tag: newApp
 $ docker run -it test
 Hello World!
 ```
+
+## Contributing
+
+There's a lot of room for improvement, especially with customization of the underlying dockerfile. 
+Feel free to create pull requests for additional features.
