@@ -43,3 +43,44 @@ Options:
 
   -? | -h | --help     Show help information
 ```
+
+## Example 
+
+```bash
+$ mkdir newApp
+$ cd newApp
+$ dotnet new console
+The template "Console Application" was created successfully.
+
+... etc output...
+
+```
+
+At this point you need to edit `newApp.csproj` and add the tool reference from above, and the whole file will look like:
+
+```XML
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <DotNetCliToolReference Include="Brthor.Dockerize.NET" Version="1.0.0-*" />
+  </ItemGroup>
+</Project>
+```
+
+Continuing on the command line:
+
+```bash
+$ dotnet dockerize
+Dockerize Config
+Base Docker Image: microsoft/dotnet:2.0-runtime
+Base Rid of Docker Image: linux-x64
+Tag: newApp
+
+... etc output...
+
+$ docker run -it test
+Hello World!
+```
