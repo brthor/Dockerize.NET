@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.DotNet.Cli.Utils;
+﻿using Microsoft.DotNet.Cli.Utils;
 
 namespace Brthor.Dockerize
 {

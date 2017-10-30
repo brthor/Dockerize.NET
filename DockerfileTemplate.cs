@@ -1,6 +1,6 @@
 ﻿namespace Brthor.Dockerize
 {
-    public class DockerfileTemplate
+    public static class DockerfileTemplate
     {
         private const string Template = 
 @"
