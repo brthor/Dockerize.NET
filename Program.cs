@@ -13,6 +13,12 @@ namespace Brthor.Dockerize
         {
             var commandLineApplication =
                 new CommandLineApplication(throwOnUnexpectedArg: false);
+            
+            var project = commandLineApplication.Option(
+                "-p |--project <project>",
+                "The path to the project to dockerize. Only required if the multiple projects exist " +
+                "in a directory or the project is not in the current working directory.",
+                CommandOptionType.SingleValue);
 
             var tag = commandLineApplication.Option(
                 "-t |--tag <tag>",
@@ -34,8 +40,7 @@ namespace Brthor.Dockerize
             commandLineApplication.HelpOption("-? | -h | --help");
             commandLineApplication.OnExecute(() =>
             {
-                var projectFilePath = GetMSBuildProjPath(Environment.CurrentDirectory);
-                var projectName = Path.GetFileNameWithoutExtension(projectFilePath);
+                var projectName = GetProjectName(Environment.CurrentDirectory, project);
                 var config = new DockerizeConfiguration(projectName, tag.Value(), baseRid.Value(), baseImage.Value());
 
                 return Run(config);
@@ -43,7 +48,29 @@ namespace Brthor.Dockerize
             
             return commandLineApplication.Execute(args);
         }
-        
+
+        private static string GetProjectName(string currentDirectory, CommandOption project)
+        {
+            string projectFilePath;
+            if (project.HasValue())
+            {
+                projectFilePath = project.Value();
+
+                if (!File.Exists(projectFilePath))
+                {
+                    throw new GracefulException(string.Format(
+                        "The project file {0} does not exist.",
+                        projectFilePath));
+                }
+            }
+            else
+            {
+                projectFilePath = GetMSBuildProjPath(currentDirectory);
+            }
+
+            return Path.GetFileNameWithoutExtension(projectFilePath);
+        }
+
         static int Run(DockerizeConfiguration config){
 
             var projectDirectory = Environment.CurrentDirectory;

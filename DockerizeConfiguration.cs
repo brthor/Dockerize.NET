@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.DotNet.Cli.Utils;
 
 namespace Brthor.Dockerize
 {
@@ -24,11 +25,11 @@ namespace Brthor.Dockerize
             GeneratedImageTag = tag ?? projectName;
             BaseRid = baseRid ?? "linux-x64";
             BaseImage = baseImage ?? "microsoft/dotnet:2.0-runtime";
-
-            Console.WriteLine("Dockerize Config");
-            Console.WriteLine($"Base Docker Image: {BaseImage}");
-            Console.WriteLine($"Base Rid of Docker Image: {BaseRid}");
-            Console.WriteLine($"Tag: {GeneratedImageTag}");
+            
+            Reporter.Output.WriteLine($"Dockerize.NET".Blue());
+            Reporter.Output.WriteLine("Base Docker Image: ".White() +  $"{BaseImage}".Green());
+            Reporter.Output.WriteLine("Base Rid of Docker Image: ".White() + $"{BaseRid}".Green());
+            Reporter.Output.WriteLine("Tag: ".White() + $"{GeneratedImageTag}".Green());
         }
     }
 }
