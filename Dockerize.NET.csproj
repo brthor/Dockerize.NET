@@ -17,4 +17,13 @@
     <PackageReference Include="System.Threading.ThreadPool" Version="4.3.0" />
     <PackageReference Include="System.Net.Primitives" Version="4.3.0" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="Dockerize.NET.Tests\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Remove="Dockerize.NET.Tests\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Dockerize.NET.Tests\**" />
+  </ItemGroup>
 </Project>
