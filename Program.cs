@@ -140,13 +140,6 @@ namespace Brthor.Dockerize
             }
 
             return projectFiles.First();
-//            var type = Type.GetType("Microsoft.DotNet.Cli.Utils.ProjectFactory");
-//            var projectFactory = Activator.CreateInstance(type, new EnvironmentProvider());
-//
-//            var method = projectFactory.GetType()
-//                .GetMethod("GetMSBuildProjPath", BindingFlags.Instance | BindingFlags.NonPublic);
-//
-//            return (string) method.Invoke(projectFactory, new object[] {});
         }
     }
 }
