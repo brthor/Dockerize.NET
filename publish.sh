@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ev
 
 if [ "${TRAVIS_PULL_REQUEST}" = "false" ]; then
 	dotnet pack -c Release --version-suffix $(printf %05d $TRAVIS_BUILD_NUMBER)
