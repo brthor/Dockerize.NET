@@ -19,6 +19,12 @@ namespace Brthor.Dockerize
                 "The path to the project to dockerize. Only required if the multiple projects exist " +
                 "in a directory or the project is not in the current working directory.",
                 CommandOptionType.SingleValue);
+            
+            var configuration = commandLineApplication.Option(
+                "-c |--configuration <configuration>",
+                "The configuration in which to publish the project. " +
+                "Passed directly to 'dotnet publish -c <configuration>'. Defaults to Release.",
+                CommandOptionType.SingleValue);
 
             var tag = commandLineApplication.Option(
                 "-t |--tag <tag>",
@@ -41,7 +47,7 @@ namespace Brthor.Dockerize
             commandLineApplication.OnExecute(() =>
             {
                 var projectName = GetProjectName(Environment.CurrentDirectory, project);
-                var config = new DockerizeConfiguration(projectName, tag.Value(), baseRid.Value(), baseImage.Value());
+                var config = new DockerizeConfiguration(projectName, configuration.Value(), tag.Value(), baseRid.Value(), baseImage.Value());
 
                 return Run(config);
             });
@@ -78,7 +84,10 @@ namespace Brthor.Dockerize
             var publishOutDirectory = Path.Combine(dockerizeBaseDir, "publish");
             var dockerfilePath = Path.Combine(dockerizeBaseDir, "Dockerfile");
             
-            var publish = Command.Create("dotnet", new[] {"publish", "-o", publishOutDirectory, "-r", config.BaseRid});
+            var publish = Command.Create("dotnet", new[] {"publish", 
+                "-o", publishOutDirectory, 
+                "-r", config.BaseRid, 
+                "-c", config.BuildConfiguration});
 
             var publishResult = publish.WorkingDirectory(projectDirectory).ForwardStdErr().ForwardStdOut().Execute();
 
