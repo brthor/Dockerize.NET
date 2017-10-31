@@ -9,4 +9,4 @@ script:
  - dotnet build
  - (cd ./Dockerize.NET.Tests && dotnet test)
  - cd .. 
- - ./publish.sh
+ - publish.sh
