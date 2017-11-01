@@ -8,5 +8,5 @@ services:
 script:
  - dotnet build
  - (cd ./Dockerize.NET.Tests && dotnet test)
- - cd .. 
+after_success:
  - bash publish.sh
