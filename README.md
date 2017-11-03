@@ -1,7 +1,7 @@
 # Dockerize.NET: Your .NET Core App to a docker image
 
 [![Build Status](https://travis-ci.org/brthor/Dockerize.NET.svg?branch=master)](https://travis-ci.org/brthor/Dockerize.NET)
-[![Myget Version Number](https://img.shields.io/myget/thor/v/Brthor.Dockerize.NET.svg?color=green)](https://www.myget.org/feed/thor/package/nuget/Brthor.Dockerize.NET)
+[![Nuget Version Number](https://img.shields.io/nuget/v/Brthor.Dockerize.NET.svg)](https://www.nuget.org/packages/Brthor.Dockerize.NET)
 
 `dotnet dockerize -t brthor/serviceWorker:dev`
 
