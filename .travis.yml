@@ -10,3 +10,6 @@ script:
  - (cd ./Dockerize.NET.Tests && dotnet test)
 after_success:
  - bash publish.sh
+cache:
+  directories:
+  - $HOME/.nuget
