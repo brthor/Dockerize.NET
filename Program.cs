@@ -43,11 +43,17 @@ namespace Brthor.Dockerize
                 "update BaseRid if appropriate. Defaults to \"microsoft/dotnet:2.0-runtime\".",
                 CommandOptionType.SingleValue);
             
+            var username = commandLineApplication.Option(
+                "-u |--user <username>",
+                "Generate a user with name <username> and set it to the current user inside the container. \n" +
+                "It is recommended to run production containers not as root for security.",
+                CommandOptionType.SingleValue);
+            
             commandLineApplication.HelpOption("-? | -h | --help");
             commandLineApplication.OnExecute(() =>
             {
                 var projectName = GetProjectName(Environment.CurrentDirectory, project);
-                var config = new DockerizeConfiguration(projectName, configuration.Value(), tag.Value(), baseRid.Value(), baseImage.Value());
+                var config = new DockerizeConfiguration(projectName, configuration.Value(), tag.Value(), baseRid.Value(), baseImage.Value(), username.Value());
 
                 return Run(config);
             });
