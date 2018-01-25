@@ -2,19 +2,28 @@
 {
     public static class DockerfileTemplate
     {
-        private const string Template = 
-@"
-FROM {0}
-
-RUN mkdir /projectBinaries
-ADD ./publish/ /projectBinaries/
-
-CMD /projectBinaries/{1}
-";
-
         public static string Generate(DockerizeConfiguration config, string outputBinaryName)
         {
-            return string.Format(Template, config.BaseImage, outputBinaryName);
+            var addUser = config.Username == null 
+                ? ""
+                : $@"RUN groupadd -r {config.Username} && useradd --no-log-init -r -g {config.Username} {config.Username}
+RUN chown {config.Username}:{config.Username} /projectBinaries
+USER {config.Username}:{config.Username}";
+
+            var chownOnAdd = config.Username == null
+                ? ""
+                : $"--chown={config.Username}:{config.Username} ";
+            
+            var dockerfileContent = $@"
+FROM {config.BaseImage}
+
+RUN mkdir /projectBinaries
+{addUser}
+ADD {chownOnAdd}./publish/ /projectBinaries/
+
+CMD /projectBinaries/{outputBinaryName}
+";
+            return dockerfileContent;
         }
     }
 }

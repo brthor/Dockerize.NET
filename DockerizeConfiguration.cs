@@ -20,18 +20,25 @@ namespace Brthor.Dockerize
         public string GeneratedImageTag { get; }
         
         public string BuildConfiguration { get; }
+        
+        public string Username { get; }
 
-        public DockerizeConfiguration(string projectName, string configuration, string tag, string baseRid, string baseImage)
+        public DockerizeConfiguration(string projectName, string configuration, string tag, string baseRid, string baseImage, 
+            string username=null)
         {
             GeneratedImageTag = tag ?? projectName;
             BaseRid = baseRid ?? "linux-x64";
             BaseImage = baseImage ?? "microsoft/dotnet:2.0-runtime";
             BuildConfiguration = configuration ?? "Release";
+            Username = username;
             
             Reporter.Output.WriteLine($"Dockerize.NET".Blue());
             Reporter.Output.WriteLine("Base Docker Image: ".White() +  $"{BaseImage}".Green());
             Reporter.Output.WriteLine("Base Rid of Docker Image: ".White() + $"{BaseRid}".Green());
             Reporter.Output.WriteLine("Tag: ".White() + $"{GeneratedImageTag}".Green());
+            
+            if (Username != null)
+                Reporter.Output.WriteLine("Username: ".White() + $"{Username}".Green());
         }
     }
 }
