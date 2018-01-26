@@ -20,6 +20,7 @@ FROM {config.BaseImage}
 RUN mkdir /projectBinaries
 {addUser}
 ADD {chownOnAdd}./publish/ /projectBinaries/
+WORKDIR /projectBinaries/
 
 CMD /projectBinaries/{outputBinaryName}
 ";
