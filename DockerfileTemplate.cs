@@ -6,7 +6,7 @@
         {
             var addUser = config.Username == null 
                 ? ""
-                : $@"RUN groupadd -r {config.Username} && useradd --no-log-init -m -r -g {config.Username} {config.Username}
+                : $@"RUN groupadd -r {config.Username} && useradd --no-log-init -u 1000 -m -r -g {config.Username} {config.Username}
 RUN chown {config.Username}:{config.Username} /projectBinaries
 USER {config.Username}:{config.Username}";
 
