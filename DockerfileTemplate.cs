@@ -1,14 +1,21 @@
-﻿namespace Brthor.Dockerize
+﻿using System.Linq;
+
+// ReSharper disable once CheckNamespace
+namespace Brthor.Dockerize
 {
     public static class DockerfileTemplate
     {
         public static string Generate(DockerizeConfiguration config, string outputBinaryName)
         {
-            var addUser = config.Username == null 
+            var addUser = string.IsNullOrWhiteSpace(config.Username)
                 ? ""
                 : $@"RUN groupadd -r {config.Username} && useradd --no-log-init -u 1000 -m -r -g {config.Username} {config.Username}
 RUN chown {config.Username}:{config.Username} /projectBinaries
 USER {config.Username}:{config.Username}";
+
+            var ports = config.ExposedPorts == null
+                ? ""
+                : string.Join("\n", config.ExposedPorts.Select(port => $"EXPOSE {port}"));
 
             var chownOnAdd = config.Username == null
                 ? ""
@@ -21,6 +28,8 @@ RUN mkdir /projectBinaries
 {addUser}
 ADD {chownOnAdd}./publish/ /projectBinaries/
 WORKDIR /projectBinaries/
+
+{ports}
 
 CMD /projectBinaries/{outputBinaryName}
 ";

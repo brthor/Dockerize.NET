@@ -5,11 +5,12 @@ using System.Linq;
 using Microsoft.DotNet.Cli.Utils;
 using Microsoft.Extensions.CommandLineUtils;
 
+// ReSharper disable once CheckNamespace
 namespace Brthor.Dockerize
 {
-    class Program
+    public static class Program
     {
-        static int Main(string[] args)
+        public static int Main(string[] args)
         {
             var commandLineApplication =
                 new CommandLineApplication(throwOnUnexpectedArg: false);
@@ -49,11 +50,29 @@ namespace Brthor.Dockerize
                 "It is recommended to run production containers not as root for security.",
                 CommandOptionType.SingleValue);
             
+            var exposedPorts = commandLineApplication.Option(
+                "-p |--port <port>",
+                "Expose one or more ports in your docker container. Expose multiple by passing `-p` multiple times.",
+                CommandOptionType.MultipleValue);
+            
+            var dryRun = commandLineApplication.Option(
+                "-n |--dry-run",
+                "Outputs the generated dockerfile to stdout. Does not call `docker build`. Still calls `dotnet publish`",
+                CommandOptionType.NoValue);
+            
             commandLineApplication.HelpOption("-? | -h | --help");
             commandLineApplication.OnExecute(() =>
             {
                 var projectName = GetProjectName(Environment.CurrentDirectory, project);
-                var config = new DockerizeConfiguration(projectName, configuration.Value(), tag.Value(), baseRid.Value(), baseImage.Value(), username.Value());
+                var config = new DockerizeConfiguration(
+                    projectName, 
+                    configuration.HasValue() ? configuration.Value() : null, 
+                    tag.HasValue() ? tag.Value() : null, 
+                    baseRid.HasValue() ? baseRid.Value() : null, 
+                    baseImage.HasValue() ? baseImage.Value() : null, 
+                    dryRun.HasValue(),
+                    username.HasValue() ? username.Value() : null, 
+                    exposedPorts.HasValue() ? exposedPorts.Values : null);
 
                 return Run(config);
             });
@@ -83,8 +102,8 @@ namespace Brthor.Dockerize
             return Path.GetFileNameWithoutExtension(projectFilePath);
         }
 
-        static int Run(DockerizeConfiguration config){
-
+        private static int Run(DockerizeConfiguration config)
+        {
             var projectDirectory = Environment.CurrentDirectory;
             var dockerizeBaseDir = Path.Combine(projectDirectory, "bin", "dockerize");
             var publishOutDirectory = Path.Combine(dockerizeBaseDir, "publish");
@@ -121,6 +140,12 @@ namespace Brthor.Dockerize
                 Path.GetFileNameWithoutExtension(publishOutputDepsJsons.Single()).Replace(".deps", "");
 
             var dockerfile = DockerfileTemplate.Generate(config, outputBinaryName);
+
+            if (config.DryRun)
+            {
+                Console.WriteLine(dockerfile);
+                return 0;
+            }
             
             File.WriteAllText(dockerfilePath, dockerfile);
 
