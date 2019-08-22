@@ -1,4 +1,4 @@
-﻿namespace Brthor.Dockerize
+namespace Brthor.Dockerize
 {
     public static class DockerfileTemplate
     {
@@ -16,6 +16,8 @@ USER {config.Username}:{config.Username}";
             
             var dockerfileContent = $@"
 FROM {config.BaseImage}
+
+ENV DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 RUN mkdir /projectBinaries
 {addUser}
